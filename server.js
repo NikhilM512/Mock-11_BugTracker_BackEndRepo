@@ -5,12 +5,18 @@ const { connection } =require("./Config/db");
 const { UserModel } = require("./Model/User.model");
 var bodyParser = require('body-parser')
 const jwt=require("jsonwebtoken");
-// const env=require("dotenv")
+const {authenticationMiddleware}=require("./Middlewares/authenticationMiddleware")
+const cors = require("cors")
 const app=express();
 var jsonParser = bodyParser.json()
 require('dotenv').config();
 const port = process.env.PORT || 8080
 
+
+app.use(express.json())
+app.use(cors,{
+    origin:"*"
+})
 
 app.get("/",(req,res)=>{
    res.send("Hello")
@@ -64,6 +70,7 @@ app.post("/login",jsonParser,async(req,res)=>{
      }
 })
 
+app.use(authenticationMiddleware)
 
 app.listen(port,async()=>{
     try {
