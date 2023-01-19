@@ -1,22 +1,23 @@
 
 const express=require("express");
-const bcrypt= require("bcrypt")
+const bcrypt= require("bcrypt");
+const jwt=require("jsonwebtoken");
+const cors = require("cors")
 const { connection } =require("./Config/db");
 const { UserModel } = require("./Model/User.model");
-var bodyParser = require('body-parser')
-const jwt=require("jsonwebtoken");
+var bodyParser = require('body-parser');
+const {bugsRouter} = require("./Routes/bug.route")
+// const jwt=require("jsonwebtoken");
 const {authenticationMiddleware}=require("./Middlewares/authenticationMiddleware")
-const cors = require("cors")
-const app=express();
 var jsonParser = bodyParser.json()
 require('dotenv').config();
 const port = process.env.PORT || 8080
-
+const app=express();
 
 app.use(express.json())
-app.use(cors,{
-    origin:"*"
-})
+app.use(cors({
+    origin : "*"
+}))
 
 app.get("/",(req,res)=>{
    res.send("Hello")
@@ -71,6 +72,7 @@ app.post("/login",jsonParser,async(req,res)=>{
 })
 
 app.use(authenticationMiddleware)
+app.use("/bugs", bugsRouter)
 
 app.listen(port,async()=>{
     try {
