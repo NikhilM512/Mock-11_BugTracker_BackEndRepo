@@ -5,10 +5,10 @@ const { connection } =require("./Config/db");
 const { UserModel } = require("./Model/User.model");
 var bodyParser = require('body-parser')
 const jwt=require("jsonwebtoken");
-const env=require("dotenv")
+// const env=require("dotenv")
 const app=express();
 var jsonParser = bodyParser.json()
-env.config();
+require('dotenv').config();
 const port = process.env.PORT || 8080
 
 
